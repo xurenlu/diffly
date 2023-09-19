@@ -1,0 +1,11 @@
+.logItem {
+    padding:.5em;
+}
+
+.svgIcon {
+    vertical-align: middle;
+    fill: cornflowerblue;
+    overflow: hidden;
+    /** line color :black */
+    stroke: antiquewhite;
+}

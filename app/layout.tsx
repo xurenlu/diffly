@@ -1,7 +1,8 @@
 import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-
+import type {Metadata} from 'next'
+import {Inter} from 'next/font/google'
+import {ColorModeScript} from '@chakra-ui/react'
+import theme from '@/lib/theme'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -15,8 +16,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+
     <html lang="en">
+    <head>
+      <title>api diff</title>
+    </head>
+    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <body className={inter.className}>{children}</body>
+
     </html>
+
   )
 }
