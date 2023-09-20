@@ -3,6 +3,7 @@ import {motion} from "framer-motion";
 import {IoNotificationsSharp} from "react-icons/io5";
 import {Progress, Button,useToast} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
+import {BsFillCaretDownFill} from "react-icons/bs";
 
 import {
     Popover,
@@ -36,8 +37,7 @@ export function Xprogress(){
             setValue((v) => {
                 if (v >= 100) {
                     clearInterval(timer);
-                    setDone(true)
-                    toastMsg()
+                    //setDone(true)
                     return 100;
                 }
                 return v + 30;
@@ -54,13 +54,13 @@ export function Xprogress(){
 
     { done?
     <div style={{position:"relative"}}>
-        <div style={{zIndex:"999",position:"absolute",top:"1px",right:"30px"}} id={"process-icon"}>
+        <div style={{zIndex:"999",position:"absolute",top:"5px",right:"5px"}} id={"process-icon"}>
             <Popover isOpen={popup}>
                 <PopoverTrigger>
                     <motion.div
-                        whileHover={{ scale: 1.3 }}
+                        whileHover={{ scale: 1.2 }}
                         animate={{
-                            y:[1,20,1],
+                            y:[1,10,1],
                             scale: [1,1.5,1],
                             rotate: [0,180,360],
                             opacity: [0.3,0.7,1],
@@ -70,7 +70,7 @@ export function Xprogress(){
                         }}
                     >
 
-                        <IoNotificationsSharp size={24} onClick={ ppp }/>
+                        <BsFillCaretDownFill size={16} onClick={ ppp }/>
                     </motion.div>
                 </PopoverTrigger>
                 <PopoverContent>

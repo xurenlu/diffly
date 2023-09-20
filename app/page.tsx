@@ -1,21 +1,23 @@
 'use client'
-import {ChakraProvider, Checkbox, Progress, Text} from "@chakra-ui/react";
+import {ChakraProvider, Checkbox, Stack, Button,Text} from "@chakra-ui/react";
 import {SideBar} from "@/components/sideBar";
 import {diff, formatters} from "jsondiffpatch"
 import 'jsondiffpatch/dist/formatters-styles/html.css'
 import 'jsondiffpatch/dist/formatters-styles/annotated.css'
 import {useEffect, useState} from "react";
 import Image from "next/image";
-import {motion} from "framer-motion";
-import {IoNotificationsSharp} from "react-icons/io5";
 import {Xprogress} from "@/components/xprogress";
+
 
 export default  function Home() {
     const [html, setHtml] = useState("");
     const [showUnchanged, setShowUnchanged] = useState(false);
+
+
+
     //const
     const handle = async (id:number) => {
-        const resp = await fetch("/api/json_diff/view/"+id+"?rnd="+Math.random());
+        const resp = await fetch("/api/v3/json_diff/view/"+id+"?rnd="+Math.random());
         const data = await resp.json();
         console.log("data,",data)
         const delta = diff(data.old_body, data.new_body);
@@ -30,9 +32,17 @@ export default  function Home() {
         setShowUnchanged(evt.target.checked)
         formatters.html.showUnchanged(evt.target.checked)
     }
+    const [height, setHeight] = useState(500);
+    const [width, setWidth] = useState(800);
+    const handleResize = ()=>{
+        setHeight(document.documentElement.clientHeight);
+        setWidth(document.documentElement.clientWidth);
+
+    }
     // @ts-ignore
     useEffect(() => {
-
+        handleResize()
+        window.addEventListener("resize", handleResize)
         window.addEventListener('scroll', function() {
         //     const myDiv = document.getElementById('prog');
         //     console.log("pageYOffset:",window.pageYOffset);
@@ -71,27 +81,27 @@ export default  function Home() {
             <ChakraProvider>
                 <Xprogress/>
 
-                <div style={{display: "flex", minWidth: "800px"}}>
-                    <div style={{flex: "1"}} className={"pl-2 pt-2"}>
-                        <Image src={"/logo4.png"} alt={"log"} width={64} height={64} />
-                    </div>
-                    <div style={{flex:"4",verticalAlign:"bottom"}} className={"relative"} >
-                        {/** verical align bottom **/}
-                        <Text fontSize="4xl" className={"absolute inset-x-0 bottom-0"} color="blue.500" style={{margin: "0 auto"}}>Api diff</Text>
-                    </div>
 
-                </div>
-                <div style={{display: "flex", minWidth: "800px"}}>
+                <div style={{display: "flex", minWidth: "1080px"}}>
                     <div style={{width: "30%"}}>
 
-                        <SideBar onChange={updateId}/>
+                        <SideBar onChange={updateId} height={(height-144)+"px"}/>
                     </div>
                     <div style={{width: "70%"}} className={"p-2"}>
-                        <Checkbox onChange={changed} defaultIsChecked={showUnchanged}>show unchanged property</Checkbox>
+                        {html?
+                        <div style={{display:"flex",justifyContent:"flex-end"}} >
+                            <Checkbox style={{}} onChange={changed} defaultChecked={showUnchanged}>show unchanged</Checkbox>
+                        </div>
+                            :
+                            <></>
+                        }
+
                         <div className="content" dangerouslySetInnerHTML={{__html: html}}></div>
 
                     </div>
                 </div>
+
+
 
 
             </ChakraProvider>

@@ -21,9 +21,9 @@ export default function RootLayout({
     <head>
       <title>api diff</title>
     </head>
-    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <body className={inter.className}>{children}</body>
-
+      <body className={inter.className}>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      {children}</body>
     </html>
 
   )

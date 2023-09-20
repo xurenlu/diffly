@@ -1,21 +1,34 @@
 import {
     Button,
+    Drawer,
+    DrawerBody,
+    DrawerCloseButton,
+    DrawerContent,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerOverlay,
     Input,
-    InputGroup, InputLeftAddon,
-    InputLeftElement,
+    InputGroup,
+    InputLeftAddon, InputLeftElement, InputRightAddon,
     InputRightElement,
     Select,
+    Stack,
     Textarea,
+    useDisclosure,
     useToast
 } from "@chakra-ui/react";
 import styles from './styles/itemStyle.module.css'
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {VscDebugConsole} from 'react-icons/vsc'
 
 import CopyToClipboard from '@uiw/react-copy-to-clipboard';
-import {PiArrowLeftBold,PiArrowRightBold} from "react-icons/pi";
+import {PiArrowLeftBold, PiArrowRightBold} from "react-icons/pi";
 import {FaLink} from "react-icons/fa";
-import {BiSolidCopy} from 'react-icons/bi'
+import {BiBoltCircle, BiSolidCopy} from 'react-icons/bi'
+import {BsDatabaseFillAdd} from 'react-icons/bs'
+import {CgArrowsShrinkV, CgArrowsMergeAltV} from 'react-icons/cg'
+import Image from "next/image";
+
 
 interface ItemType {
     id: number;
@@ -28,24 +41,35 @@ interface ItemType {
 }
 interface SideBarProps {
     onChange:(id:number)=>void;
+    height?:string;
 }
 export  function SideBar(props:SideBarProps) {
     const toast = useToast()
-    const {onChange} = props;
-    const [logs, setLogs] = useState([]);
+    const {onChange,height} = props;
+    const [endPoints, setEndPoints] = useState([]);
     const [items, setItems] = useState([]);
-    const handle = async () => {
-        const resp = await fetch("/api/json_diff/groups");
-        let temp =  await resp.json();
-        setLogs(temp)
-        const diffResp = await fetch("/api/json_diff/index");
-        let t =  await diffResp.json();
-        setItems(t);
+    const [accessLog, setAccessLog] = useState("");
+    const [activeId, setActiveId] = useState(0);
+
+    //control drawer
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const btnRef = useRef()
+
+    const handle =  () => {
+        console.log("handle called")
+        const resp =  fetch("/api/v3/groups").then((resp:any)=>{ return resp.json()})
+            .then((data:any)=>{
+                console.log("endpoints:",data)
+                setEndPoints(data)
+            })
+
     }
     useEffect(() => {
         handle()
     }, []);
     const click = (id:number)=>{
+        console.log("id",id)
+        console.log("onChange",onChange)
         if(onChange){
             onChange(id)
         }
@@ -98,115 +122,192 @@ export  function SideBar(props:SideBarProps) {
 
         })
     }
-    return (
-        <div style={{minHeight:"400px",height:"800px",overflow:"scroll"}} className={"p-2"}>
 
-            { /**
-            <Select placeholder="Select option">
-                <option value={''}>choose group first</option>
-                {logs.map((log: any) => <option key={log} value={log}>{log}</option>)}
+    const postHttpLog= ()=>{
+        fetch("/api/v3/http_log/new",{
+            method:"POST",
+            body:accessLog
+        }).then(()=>{}).then(()=>{
+            toast({
+                title: "post success",
+                description: "数据提交成功.",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+                position:"top"
+            })
+            setTimeout(()=>{
+                onClose()
+            },500)
+        })
+    }
+    const load4group = (event:any)=>{
+        const val = event.target.value;
+        if(val){
+                fetch("/api/v3/json_diff/index?end_point_id="+val).then((resp:any)=>{ return resp.json()})
+                    .then((data:any)=>{
+                        setItems(data);
+                    });
+        }
+    }
+    const activeIt = (id:number)=>{
+        console.log("active it:",id)
+        setActiveId(id)
+    }
+    const unActiveIt = (id:number)=>{
+        console.log("deactive:",id)
+        setActiveId(0)
+    }
+    return (
+        <div style={{zIndex:"999",position:"fixed",top:"15px",left:"5px",minWidth:"300px"}}>
+            <div style={{flex: "1",display:"flex",flexDirection:"row"}} className={"pl-2 pt-2"}>
+                <Image src={"/logo4.png"} alt={"log"} width={64} height={64} />
+            </div>
+        <div style={{minHeight:"500px",height:height,overflowY:"auto"}} className={"p-2"}>
+
+            <Select placeholder="choose endpoint first" onChange={load4group}>
+                {endPoints.map((log: any) => <option key={log.id} value={log.id}>{log.path}</option>)}
             </Select>
 
-            <div style={{display:"flex"}} className={"p-1"}>
-                <div style={{flex:"1"}}>
-                    <Button colorScheme={"whatsapp"} onClick={clear}>
-                        Clear api-visits
-                    </Button>
-                </div>
-                <div style={{flex:"1"}}>
-                    <Button colorScheme={"facebook"} onClick={execute}>
-                        Execute batch api visits
-                    </Button>
-                </div>
-            </div> */ }
 
-            <div style={{display:"flex"}} className={""}>
-                <Button style={{width:"99%"}} colorScheme={"blue"} onClick={all}>
-                    clear and execute
-                </Button>
 
-            </div>
 
             <ul>
                 {items.map((item: ItemType) => <li
                     style={{width:"100%"}}
-                    className={styles.logItem +" border-solid border-indigo-600 p-8 mb-4 mt-4  " + (item.chosen=='y'?"bg-gray-500":" ")} key={item.id} onClick={() => {
-                    if(item.chosen=='y'){
-                        item.chosen=''
-                    }else{
-                        item.chosen = 'y'
-                    }
-                    click(item.id)
-                } }>
-                    {item.id},
-                    <div style={{width:"90%",margin:"3px auto"}}>
-                        <InputGroup>
-                            <InputLeftAddon>
-                                <PiArrowLeftBold size={16} />
+                    className={styles.logItem +" border-solid border-indigo-600 p-8 mb-4 mt-4  " + (item.chosen=='y'?"bg-gray-500":" ")}
+                    key={item.id}
+                >
+                    <div style={{width:"90%",margin:"3px auto"}} >
+                        <InputGroup >
+                            <InputLeftElement>
+                                {item.id}
+                            </InputLeftElement>
+                            <Input defaultValue={item.uri} variant={"ghost"} onClick={ ()=> click(item.id) }/>
+                            <InputRightAddon>
 
-                            </InputLeftAddon>
-                            <Input colorScheme={"whatsapp"} size="md" value={"old_debug:"+item.old_debug} />
-                            <InputRightElement>
-                                <CopyToClipboard  text={item.old_debug}
-                                                  onClick={copied}>
-                                    <BiSolidCopy className={styles.svgIcon} size={20}/>
-                                </CopyToClipboard>
-                            </InputRightElement>
-                        </InputGroup>
+                                { item.id==activeId ?
 
-
-
-                    </div>
-
-                    <div style={{width:"90%",margin:"3px auto"}}>
-                        <InputGroup>
-                        <InputLeftAddon>
-                            <PiArrowRightBold size={16} />
-                        </InputLeftAddon>
-                        <Input size="md" value={"new debug:"+item.new_debug} />
-                            <InputRightElement>
-                                <CopyToClipboard  text={item.new_debug}
-                                                  onClick={copied}>
-                                    <BiSolidCopy className={styles.svgIcon} size={20}/>
-                                </CopyToClipboard>
-                            </InputRightElement>
+                                    <CgArrowsMergeAltV size={20} style={{cursor:"pointer"}} onClick={ ()=> unActiveIt(item.id)}/>:
+                                    <CgArrowsShrinkV size={20} style={{cursor:"pointer"}} onClick={ ()=> activeIt(item.id)}/>
+                                }
+                            </InputRightAddon>
                         </InputGroup>
                     </div>
+                    {item.id == activeId ?
+                    <div >
+                        <div style={{width:"90%",margin:"3px auto"}}>
 
-                    <div style={{width:"90%",margin:"3px auto"}}>
-                        <InputGroup>
-                            <InputLeftAddon>
-                               <FaLink size={16} />
-                            </InputLeftAddon>
-                            <Input size="md" value={"url:"+item.uri} />
-                            <InputRightElement>
-                                <CopyToClipboard  text={item.uri}
-                                                  onClick={copied}>
-                                    <BiSolidCopy className={styles.svgIcon} size={20}/>
-                                </CopyToClipboard>
-                            </InputRightElement>
-                        </InputGroup>
+                            <InputGroup>
+                                <InputLeftElement>
+                                    <PiArrowLeftBold size={16} />
+
+                                </InputLeftElement>
+                                <Input colorScheme={"whatsapp"} size="md" style={{border:"none"}} value={"old_debug:"+item.old_debug} />
+                                <InputRightAddon style={{border:"none"}} background={"none"}>
+                                    <CopyToClipboard  text={item.old_debug}
+                                                      onClick={copied} background={"none"}>
+                                        <BiSolidCopy className={styles.svgIcon} size={20}/>
+                                    </CopyToClipboard>
+                                </InputRightAddon>
+                            </InputGroup>
+
+
+
+                        </div>
+
+                        <div style={{width:"90%",margin:"3px auto"}}>
+                            <InputGroup>
+                                <InputLeftElement>
+                                    <PiArrowRightBold size={16} />
+                                </InputLeftElement>
+                                <Input size="md" style={{border:"none"}} value={"new debug:"+item.new_debug} />
+                                <InputRightAddon style={{border:"none"}} background={"none"}>
+                                    <CopyToClipboard  text={item.new_debug}
+                                                      onClick={copied} background={"none"}>
+                                        <BiSolidCopy className={styles.svgIcon} size={20}/>
+                                    </CopyToClipboard>
+                                </InputRightAddon>
+                            </InputGroup>
+                        </div>
+
+                        <div style={{width:"90%",margin:"3px auto"}}>
+                            <InputGroup>
+                                <InputLeftElement>
+                                    <FaLink size={16} />
+                                </InputLeftElement>
+                                <Input size="md" style={{border:"none"}} value={"url:"+item.uri} />
+                                <InputRightAddon style={{border:"none"}} background={"none"}>
+                                    <CopyToClipboard  text={item.uri}
+                                                      onClick={copied} background={"none"}>
+                                        <BiSolidCopy className={styles.svgIcon} size={20}/>
+                                    </CopyToClipboard>
+                                </InputRightAddon>
+                            </InputGroup>
+
+                        </div>
+
+                        <div style={{width:"90%",margin:"3px auto"}}>
+                            <InputGroup>
+                                <InputLeftElement>
+                                    <VscDebugConsole size={16} />
+                                </InputLeftElement>
+                                <Input size="md" style={{border:"none"}} value={"cookie:"+item.cookie} />
+                                <InputRightAddon style={{border:"none"}} background={"none"}>
+                                    <CopyToClipboard  text={item.cookie}
+                                                      onClick={copied}>
+                                        <BiSolidCopy className={styles.svgIcon} size={20}/>
+                                    </CopyToClipboard>
+                                </InputRightAddon>
+                            </InputGroup>
+                        </div>
 
                     </div>
-
-                    <div style={{width:"90%",margin:"3px auto"}}>
-                        <InputGroup>
-                            <InputLeftAddon>
-                            <VscDebugConsole size={16} />
-                            </InputLeftAddon>
-                            <Input size="md" value={"cookie:"+item.cookie} />
-                            <InputRightElement>
-                                <CopyToClipboard  text={item.cookie}
-                                                  onClick={copied}>
-                                    <BiSolidCopy className={styles.svgIcon} size={20}/>
-                                </CopyToClipboard>
-                            </InputRightElement>
-                        </InputGroup>
-                    </div>
+                    :<></>}
 
                 </li>)}
             </ul>
 
         </div>
+
+            <Stack direction='row' spacing={4} className={"p-2"}>
+                <Button
+                    onClick={onOpen} colorScheme={"blue"}
+                    className={"mr-2"}
+                    leftIcon={
+                <BsDatabaseFillAdd size={20} ref={btnRef}  />}
+                    />
+                <Button leftIcon={<BiBoltCircle size={24}/>} style={{width:"40%"}} colorScheme={"yellow"} onClick={all}>
+清除重来
+                </Button>
+
+            </Stack>
+
+            <Drawer
+                isOpen={isOpen}
+                placement='left'
+                onClose={onClose}
+                finalFocusRef={btnRef}
+            >
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerCloseButton />
+                    <DrawerHeader>粘贴csv格式的access log</DrawerHeader>
+
+                    <DrawerBody>
+                        <Textarea placeholder='Paste here...' rows={12} onChange={ (evt:any)=> setAccessLog(evt.target.valule)}/>
+                    </DrawerBody>
+
+                    <DrawerFooter>
+                        <Button variant='outline' mr={3} onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button colorScheme='blue' onClick={postHttpLog}>Save</Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+
+
+            </div>
     )
 }
