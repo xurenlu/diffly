@@ -177,10 +177,10 @@ export  function SideBar(props:SideBarProps) {
             <ul>
                 {items.map((item: ItemType) => <li
                     style={{width:"100%"}}
-                    className={styles.logItem +" border-solid border-indigo-600 p-8 mb-4 mt-4  " + (item.chosen=='y'?"bg-gray-500":" ")}
+                    className={styles.logItem +" border-solid border-indigo-600 p-4  " + (item.chosen=='y'?"bg-gray-500":" ")}
                     key={item.id}
                 >
-                    <div style={{width:"90%",margin:"3px auto"}} >
+                    <div style={{width:"90%",margin:"2px auto"}} >
                         <InputGroup >
                             <InputLeftElement>
                                 {item.id}
