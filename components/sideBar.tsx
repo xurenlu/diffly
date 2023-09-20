@@ -46,6 +46,7 @@ interface SideBarProps {
 export  function SideBar(props:SideBarProps) {
     const toast = useToast()
     const {onChange,height} = props;
+    const [groupId,setCurrentGroupId] = useState("");
     const [endPoints, setEndPoints] = useState([]);
     const [items, setItems] = useState([]);
     const [accessLog, setAccessLog] = useState("");
@@ -100,7 +101,7 @@ export  function SideBar(props:SideBarProps) {
         })
     }
     const all = ()=>{
-        fetch("/api/json_diff/all",{
+        fetch("/api/v3/json_diff/clear_and_go?end_point_id="+groupId,{
             method:"POST"
         }).then(()=>{}).then(()=>{
             toast({
@@ -143,6 +144,7 @@ export  function SideBar(props:SideBarProps) {
     }
     const load4group = (event:any)=>{
         const val = event.target.value;
+        setCurrentGroupId(val);
         if(val){
                 fetch("/api/v3/json_diff/index?end_point_id="+val).then((resp:any)=>{ return resp.json()})
                     .then((data:any)=>{
