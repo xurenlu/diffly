@@ -9,8 +9,8 @@ import {
     DrawerOverlay,
     Input,
     InputGroup,
-    InputLeftAddon, InputLeftElement, InputRightAddon,
-    InputRightElement,
+    InputLeftElement,
+    InputRightAddon,
     Select,
     Stack,
     Textarea,
@@ -26,8 +26,9 @@ import {PiArrowLeftBold, PiArrowRightBold} from "react-icons/pi";
 import {FaLink} from "react-icons/fa";
 import {BiBoltCircle, BiSolidCopy} from 'react-icons/bi'
 import {BsDatabaseFillAdd} from 'react-icons/bs'
-import {CgArrowsShrinkV, CgArrowsMergeAltV} from 'react-icons/cg'
+import {CgArrowsMergeAltV, CgArrowsShrinkV} from 'react-icons/cg'
 import Image from "next/image";
+import {FocusableElement} from "@chakra-ui/utils";
 
 
 interface ItemType {
@@ -54,8 +55,8 @@ export  function SideBar(props:SideBarProps) {
 
     //control drawer
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const btnRef = useRef()
-
+    //const btnRef = useRef()
+    const btnRef: React.MutableRefObject<FocusableElement | null | undefined> = useRef()
     const handle =  () => {
         console.log("handle called")
         const resp =  fetch("/api/v3/groups").then((resp:any)=>{ return resp.json()})
@@ -160,6 +161,7 @@ export  function SideBar(props:SideBarProps) {
         console.log("deactive:",id)
         setActiveId(0)
     }
+    // @ts-ignore
     return (
         <div style={{zIndex:"999",position:"fixed",top:"15px",left:"5px",minWidth:"300px"}}>
             <div style={{flex: "1",display:"flex",flexDirection:"row"}} className={"pl-2 pt-2"}>
@@ -289,7 +291,7 @@ export  function SideBar(props:SideBarProps) {
                 isOpen={isOpen}
                 placement='left'
                 onClose={onClose}
-                finalFocusRef={btnRef}
+
             >
                 <DrawerOverlay />
                 <DrawerContent>
