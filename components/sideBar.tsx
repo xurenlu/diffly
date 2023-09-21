@@ -309,7 +309,7 @@ export  function SideBar(props:SideBarProps) {
                         />
                         nginx配置提示:
                         <pre>
-                        log_format csv_log '$http_cookie^^^^$request_uri';</pre>
+                        log_format csv_log &apos;$http_cookie^^^^$request_uri&apos;;</pre>
                         <pre>
                         access_log  /var/log/nginx/access.log  csv_log;
                         </pre>
