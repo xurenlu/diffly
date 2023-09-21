@@ -126,9 +126,11 @@ export  function SideBar(props:SideBarProps) {
     }
 
     const postHttpLog= ()=>{
+        const formData = new FormData()
+        formData.append("body",accessLog)
         fetch("/api/v3/http_log/new",{
             method:"POST",
-            body:accessLog
+            body:formData
         }).then(()=>{}).then(()=>{
             toast({
                 title: "post success",
@@ -160,6 +162,10 @@ export  function SideBar(props:SideBarProps) {
     const unActiveIt = (id:number)=>{
         console.log("deactive:",id)
         setActiveId(0)
+    }
+    const updateLogs = (evt:any) => {
+        console.log("values:",evt.target.value)
+        setAccessLog(evt.target.value)
     }
     // @ts-ignore
     return (
@@ -299,7 +305,17 @@ export  function SideBar(props:SideBarProps) {
                     <DrawerHeader>粘贴csv格式的access log</DrawerHeader>
 
                     <DrawerBody>
-                        <Textarea placeholder='Paste here...' rows={12} onChange={ (evt:any)=> setAccessLog(evt.target.valule)}/>
+                        <Textarea placeholder='Paste here...' rows={12} onChange={ updateLogs}
+                        />
+                        nginx配置提示:
+                        <pre>
+                        log_format csv_log '$http_cookie^^^^$request_uri';</pre>
+                        <pre>
+                        access_log  /var/log/nginx/access.log  csv_log;
+                        </pre>
+
+
+
                     </DrawerBody>
 
                     <DrawerFooter>
