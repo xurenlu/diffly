@@ -69,10 +69,6 @@ export default  function Home() {
         console.log("id,",id)
         handle(id)
     }
-    // const resp = await fetch(BACKEND_URL+"/api/json_diff/view/4?rnd="+Math.random());
-    // const data = await resp.json();
-    // console.log("data,",data)
-    // const delta = diff(data.old_body, data.new_body);
     const getDocumentWidth = ()=>{
         return document.documentElement.clientWidth;
     }
