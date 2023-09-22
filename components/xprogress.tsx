@@ -15,13 +15,15 @@ export function Xprogress(props:XProgressProps){
     let toastId:any;
     const finished = ()=>{
         console.log("onFinished called");
-        toastId = toast({
+        if(!done){
+            toastId = toast({
             title: "Job Finished.",
             description: "async job finished.",
             status: "success",
             duration: 3000,
             id:toastId
-        })
+            })
+        }
         setDone (true)
     }
     useEffect(() => {
