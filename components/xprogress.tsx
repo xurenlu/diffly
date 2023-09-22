@@ -12,14 +12,15 @@ export function Xprogress(props:XProgressProps){
     const {jobName} = props;
     const [done,setDone] = useState(false)
     const [popup, setPopup] = useState(false);
-
+    let toastId:any;
     const finished = ()=>{
         console.log("onFinished called");
-        toast({
+        toastId = toast({
             title: "Job Finished.",
             description: "async job finished.",
             status: "success",
             duration: 3000,
+            id:toastId
         })
         setDone (true)
     }
