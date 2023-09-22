@@ -48,6 +48,7 @@ export default function MultiStepProgress(props:StepAndProgressProps){
                 ably.close()
             }
         }
+        setWholePercent(msg.data.percent)
         setAllSteps(msg.data.stages)
     });
     const initData = ()=>{
