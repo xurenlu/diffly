@@ -39,7 +39,6 @@ export default function MultiStepProgress(props:StepAndProgressProps){
         console.log('Received: ' , msg.data,msg.data.status);
         if(msg.data.status==1){
             //已经完成了，通知回调;
-            console.log("try to call onFinish props")
             if(onFinish && !finished){
                 SetFinished(true)
                 setTimeout(()=> {

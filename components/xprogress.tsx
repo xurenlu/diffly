@@ -15,8 +15,8 @@ export function Xprogress(props:XProgressProps){
     const toastMsg = ()=>{
         console.log("onFinished called");
         toast({
-            title: "execute done",
-            description: "execution finished.",
+            title: "Job Finished.",
+            description: "async job finished.",
             status: "success",
             duration: 3000,
         })
@@ -24,11 +24,6 @@ export function Xprogress(props:XProgressProps){
     useEffect(() => {
 
     }, []);
-    const ppp = ()=>{
-        console.log("hey")
-        setPopup(!popup)
-
-    }
     return <>
 
         <div style={{position:"fixed",top:"0px",width:"100%"}} >
