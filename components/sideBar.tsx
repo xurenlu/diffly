@@ -20,6 +20,7 @@ import {
 import styles from './styles/itemStyle.module.css'
 import {useEffect, useRef, useState} from "react";
 import {VscDebugConsole} from 'react-icons/vsc'
+import {configureAbly, useChannel} from "@ably-labs/react-hooks";
 
 import CopyToClipboard from '@uiw/react-copy-to-clipboard';
 import {PiArrowLeftBold, PiArrowRightBold} from "react-icons/pi";
@@ -29,6 +30,7 @@ import {BsDatabaseFillAdd} from 'react-icons/bs'
 import {CgArrowsMergeAltV, CgArrowsShrinkV} from 'react-icons/cg'
 import Image from "next/image";
 import {FocusableElement} from "@chakra-ui/utils";
+import {Xprogress} from "@/components/xprogress";
 
 
 interface ItemType {
@@ -52,20 +54,20 @@ export  function SideBar(props:SideBarProps) {
     const [items, setItems] = useState([]);
     const [accessLog, setAccessLog] = useState("");
     const [activeId, setActiveId] = useState(0);
-
+    const [jobName,setJobName] = useState("");
     //control drawer
     const { isOpen, onOpen, onClose } = useDisclosure()
     //const btnRef = useRef()
     const btnRef: React.MutableRefObject<FocusableElement | null | undefined> = useRef()
     const handle =  () => {
-        console.log("handle called")
-        const resp =  fetch("/api/v3/groups").then((resp:any)=>{ return resp.json()})
+         fetch("/api/v3/groups").then((resp:any)=>{ return resp.json()})
             .then((data:any)=>{
                 console.log("endpoints:",data)
                 setEndPoints(data)
             })
-
     }
+
+
     useEffect(() => {
         handle()
     }, []);
@@ -104,7 +106,12 @@ export  function SideBar(props:SideBarProps) {
     const all = ()=>{
         fetch("/api/v3/json_diff/clear_and_go?end_point_id="+groupId,{
             method:"POST"
-        }).then(()=>{}).then(()=>{
+        }).then((resp:any)=>{ return resp.json() }).then((data)=>{
+            let jobName = data.job;
+            console.log("jobId:",jobName)
+            setTimeout(()=>{
+                setJobName(jobName)
+            },1000)
             toast({
                 title: "execute done",
                 description: "execution finished.",
@@ -169,7 +176,8 @@ export  function SideBar(props:SideBarProps) {
     }
     // @ts-ignore
     return (
-        <div style={{zIndex:"999",position:"fixed",top:"15px",left:"5px",minWidth:"300px"}}>
+        <div style={{zIndex:"999",position:"fixed",top:"1px",left:"1px",minWidth:"300px"}}>
+            <Xprogress jobName={jobName} />
             <div style={{flex: "1",display:"flex",flexDirection:"row"}} className={"pl-2 pt-2"}>
                 <Image src={"/logo4.png"} alt={"log"} width={64} height={64} />
             </div>

@@ -75,7 +75,7 @@ export default  function Home() {
         return (
 
             <ChakraProvider>
-                <Xprogress/>
+
 
 
                 <div style={{display: "flex", minWidth: "1080px"}}>
