@@ -45,7 +45,6 @@ export default function MultiStepProgress(props:StepAndProgressProps){
                     onFinish(msg.data.result)
                 },200)
                 console.log("close ably")
-                ably.close()
             }
         }
         setWholePercent(msg.data.percent)

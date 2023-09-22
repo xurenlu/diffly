@@ -10,9 +10,10 @@ jobName?:string;
 export function Xprogress(props:XProgressProps){
     const toast = useToast()
     const {jobName} = props;
+    const [done,setDone] = useState(false)
     const [popup, setPopup] = useState(false);
 
-    const toastMsg = ()=>{
+    const finished = ()=>{
         console.log("onFinished called");
         toast({
             title: "Job Finished.",
@@ -20,14 +21,16 @@ export function Xprogress(props:XProgressProps){
             status: "success",
             duration: 3000,
         })
+        setDone (true)
     }
     useEffect(() => {
-
+        setDone(false)
     }, []);
     return <>
-
+        {done?<></>:
         <div style={{position:"fixed",top:"0px",width:"100%"}} >
-           <MultiStepProgress onFinish={toastMsg} name={jobName} />
+           <MultiStepProgress onFinish={finished} name={jobName} />
         </div>
+        }
   </>
 }
