@@ -91,7 +91,7 @@ export default function MultiStepProgress(props:StepAndProgressProps){
 
             </Stack> :
             <>
-                <Progress hasStripe colorScheme='green' size='lg' value={wholePercent}  className={" border-gray-200"} height='12px' />
+                <Progress hasStripe colorScheme='green' size='lg' value={wholePercent}  className={" border-gray-200"} height='3px' />
             </>}
         </>
         :<></>
