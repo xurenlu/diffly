@@ -83,8 +83,8 @@ export  function SideBar(props:SideBarProps) {
             method:"POST"
         }).then(()=>{}).then(()=>{
             toast({
-                title: "clear success",
-                description: "your api-visits has been cleared.",
+                title: "任务已经提交",
+                description: "已经提交了异步任务",
                 status: "success",
                 duration: 3000,
             })
@@ -113,8 +113,8 @@ export  function SideBar(props:SideBarProps) {
                 setJobName(jobName)
             },1000)
             toast({
-                title: "execute done",
-                description: "execution finished.",
+                title: "任务已经提交",
+                description: "已经提交了异步任务",
                 status: "success",
                 duration: 3000,
             })
