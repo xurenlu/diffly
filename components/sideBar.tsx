@@ -316,7 +316,7 @@ export  function SideBar(props:SideBarProps) {
 重跑
                 </Button>
 
-                <Button leftIcon={<BiBoltCircle size={24}/>} style={{width:"40%"}} colorScheme={"yellow"} onClick={rerun30}>
+                <Button leftIcon={<BiBoltCircle size={24}/>} style={{width:"40%"}} colorScheme={"teal"} onClick={rerun30}>
                     重跑(top30)
                 </Button>
             </Stack>
