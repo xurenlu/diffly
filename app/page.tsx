@@ -5,8 +5,7 @@ import {diff, formatters} from "jsondiffpatch"
 import 'jsondiffpatch/dist/formatters-styles/html.css'
 import 'jsondiffpatch/dist/formatters-styles/annotated.css'
 import {useEffect, useState} from "react";
-import Image from "next/image";
-import {Xprogress} from "@/components/xprogress";
+
 
 
 export default  function Home() {
@@ -24,7 +23,7 @@ export default  function Home() {
         if (delta) {
             console.log("delta:",delta)
             const temp = formatters.html.format(delta, data.old_body);
-            formatters.html.showUnchanged(false)
+            formatters.html.showUnchanged(showUnchanged)
             setHtml(temp)
         }
     }
@@ -67,7 +66,9 @@ export default  function Home() {
 
     const updateId = (id:number)=>{
         console.log("id,",id)
-        handle(id)
+        handle(id).then(()=>{
+            console.log("handle done")
+        })
     }
     const getDocumentWidth = ()=>{
         return document.documentElement.clientWidth;
