@@ -103,6 +103,23 @@ export  function SideBar(props:SideBarProps) {
             })
         })
     }
+    const rerun30 = ()=>{
+        fetch("/api/v3/json_diff/rerun10?end_point_id="+groupId,{
+            method:"POST"
+        }).then((resp:any)=>{ return resp.json() }).then((data)=>{
+            let jobName = data.job;
+            console.log("jobId:",jobName)
+            setTimeout(()=>{
+                setJobName(jobName)
+            },1000)
+            toast({
+                title: "任务已经提交",
+                description: "已经提交了异步任务",
+                status: "success",
+                duration: 3000,
+            })
+        })
+    }
     const all = ()=>{
         fetch("/api/v3/json_diff/clear_and_go?end_point_id="+groupId,{
             method:"POST"
@@ -296,9 +313,12 @@ export  function SideBar(props:SideBarProps) {
                 <BsDatabaseFillAdd size={20} ref={btnRef}  />}
                     />
                 <Button leftIcon={<BiBoltCircle size={24}/>} style={{width:"40%"}} colorScheme={"yellow"} onClick={all}>
-清除重来
+重跑
                 </Button>
 
+                <Button leftIcon={<BiBoltCircle size={24}/>} style={{width:"40%"}} colorScheme={"yellow"} onClick={rerun30}>
+                    重跑(top30)
+                </Button>
             </Stack>
 
             <Drawer

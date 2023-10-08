@@ -17,3 +17,19 @@ body {
 ::-webkit-scrollbar-thumb {
     background-color: #8b4b4b;
 }
+
+
+.jsondiffpatch-added .jsondiffpatch-property-name,
+.jsondiffpatch-added .jsondiffpatch-value pre,
+.jsondiffpatch-modified .jsondiffpatch-right-value pre,
+.jsondiffpatch-textdiff-added {
+    background: rgba(187,255,187,0.5) !important;
+}
+
+.jsondiffpatch-deleted .jsondiffpatch-property-name,
+.jsondiffpatch-deleted pre,
+.jsondiffpatch-modified .jsondiffpatch-left-value pre,
+.jsondiffpatch-textdiff-deleted {
+    background: rgba(255,187,187,0.5) !important;
+    text-decoration: line-through;
+}
