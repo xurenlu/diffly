@@ -1,23 +1,33 @@
 'use client'
-import {ChakraProvider, Checkbox, Stack, Button,Text} from "@chakra-ui/react";
+import {ChakraProvider, Checkbox, Stack, Button,Text,Tooltip} from "@chakra-ui/react";
 import {SideBar} from "@/components/sideBar";
 import {diff, formatters} from "jsondiffpatch"
 import 'jsondiffpatch/dist/formatters-styles/html.css'
 import 'jsondiffpatch/dist/formatters-styles/annotated.css'
 import {useEffect, useState} from "react";
 
+import {BsBookmarkCheckFill,BsBookmarkCheck} from "react-icons/bs"
+
+import {AiOutlineEyeInvisible,AiFillEyeInvisible} from "react-icons/ai"
+
+
+
 
 
 export default  function Home() {
     const [html, setHtml] = useState("");
     const [showUnchanged, setShowUnchanged] = useState(false);
-
-
+    const [chosenId,setChosenId] = useState("");
+    const [result,setResult] = useState({} as any);
+    const [marked,setMarked] = useState(false);
 
     //const
     const handle = async (id:number) => {
+        setChosenId(id+"")
         const resp = await fetch("/api/v3/json_diff/view/"+id+"?rnd="+Math.random());
         const data = await resp.json();
+        setResult(data)
+        setMarked(data.mark)
         console.log("data,",data)
         const delta = diff(data.old_body, data.new_body);
         if (delta) {
@@ -30,6 +40,30 @@ export default  function Home() {
     const changed = (evt:any)=>{
         setShowUnchanged(evt.target.checked)
         formatters.html.showUnchanged(evt.target.checked)
+    }
+    const showChanged = ()=>{
+        console.log("showChanged")
+        setShowUnchanged(true)
+        formatters.html.showUnchanged(true)
+    }
+    const hideChanged = ()=>{
+        console.log("hide changed")
+        setShowUnchanged(false)
+        formatters.html.showUnchanged(false)
+    }
+    const markIt = async ()=>{
+        const resp = await fetch("/api/v3/json_diff/mark?id="+chosenId+"&rnd="+Math.random(),{
+            method:"POST"
+        });
+        const data = await resp.json();
+        setMarked(true)
+    }
+    const unmarkIt = async ()=>{
+        const resp = await fetch("/api/v3/json_diff/unmark?id="+chosenId+"&rnd="+Math.random(),{
+            method:"POST"
+        });
+        const data = await resp.json();
+        setMarked(false)
     }
     const [height, setHeight] = useState(500);
     const [width, setWidth] = useState(800);
@@ -86,9 +120,24 @@ export default  function Home() {
                     </div>
                     <div style={{width: "70%"}} className={"p-2"}>
                         {html?
-                        <div style={{display:"flex",justifyContent:"flex-end"}} >
-                            <Checkbox style={{}} onChange={changed} defaultChecked={showUnchanged}>show unchanged</Checkbox>
+                        <div style={{display:"flex",justifyContent:"flex-end",gap:"10px"}} >
+                            {chosenId?
+                            <Text style={{}}>id:{chosenId}</Text>:<></>}
+
+                            <Tooltip label='bookmark current diff'>
+                            {marked?
+                            <BsBookmarkCheckFill size={20} onClick={unmarkIt} style={{cursor:"pointer",color:"yellow"}} />:
+                            <BsBookmarkCheck size={20} onClick={markIt} style={{cursor:"pointer",color:"gray"}}/>
+                            }
+                            </Tooltip>
+
+                            {showUnchanged?
+                             <AiFillEyeInvisible size={20} style={{cursor:"pointer",color:"yellow"}} onClick={hideChanged}/>:
+                                <AiOutlineEyeInvisible size={20}  style={{cursor:"pointer",color:"gray"}} onClick={showChanged}/>
+                            }
+
                         </div>
+
                             :
                             <></>
                         }
