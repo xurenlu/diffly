@@ -40,7 +40,7 @@ export default  function Home() {
         })
     }
     //const
-    const handle = async (id:number) => {
+    const handle = async (id:number|string) => {
         setChosenId(id+"")
         const resp = await fetch("/api/v3/json_diff/view/"+id+"?rnd="+Math.random());
         const data = await resp.json();
