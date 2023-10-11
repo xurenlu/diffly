@@ -1,27 +1,44 @@
 'use client'
-import {ChakraProvider, Checkbox, Stack, Button,Text,Tooltip} from "@chakra-ui/react";
+import {ChakraProvider, Spinner, Text, Tooltip, useToast} from "@chakra-ui/react";
 import {SideBar} from "@/components/sideBar";
 import {diff, formatters} from "jsondiffpatch"
 import 'jsondiffpatch/dist/formatters-styles/html.css'
 import 'jsondiffpatch/dist/formatters-styles/annotated.css'
+
+import {AiFillEyeInvisible, AiOutlineEyeInvisible, AiOutlineRedo} from "react-icons/ai";
 import {useEffect, useState} from "react";
 
-import {BsBookmarkCheckFill,BsBookmarkCheck} from "react-icons/bs"
-
-import {AiOutlineEyeInvisible,AiFillEyeInvisible} from "react-icons/ai"
-
-import {BsPlusSlashMinus} from "react-icons/bs"
-
-
+import {BsBookmarkCheck, BsBookmarkCheckFill} from "react-icons/bs"
 
 
 export default  function Home() {
+    const toast = useToast()
+
     const [html, setHtml] = useState("");
     const [showUnchanged, setShowUnchanged] = useState(false);
     const [chosenId,setChosenId] = useState("");
     const [result,setResult] = useState({} as any);
     const [marked,setMarked] = useState(false);
+    const [undoing,setUndoing] = useState(false);
 
+    const toastSucc = (title:string,msg:string)=>{
+        toast({
+            title: title,
+            description: msg,
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+        })
+    }
+    const toastError = (title:string,msg:string)=>{
+        toast({
+            title: title,
+            description: msg,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+        })
+    }
     //const
     const handle = async (id:number) => {
         setChosenId(id+"")
@@ -66,12 +83,29 @@ export default  function Home() {
         const data = await resp.json();
         setMarked(false)
     }
+
+    const redo = async ()=> {
+        setUndoing(true)
+        try {
+            const resp = await fetch("/api/v3/json_diff/redo/" + chosenId + "?rnd=" + Math.random(), {
+                method: "POST"
+            });
+            const data = await resp.json();
+            setUndoing(false)
+            toastSucc("redo success","redo success. reloading...")
+            await handle(data.id)
+        }catch (e){
+            setUndoing(false)
+            toastError("redo failed","redo failed. ")
+        }
+    }
+
+
     const [height, setHeight] = useState(500);
     const [width, setWidth] = useState(800);
     const handleResize = ()=>{
         setHeight(document.documentElement.clientHeight);
         setWidth(document.documentElement.clientWidth);
-
     }
     // @ts-ignore
     useEffect(() => {
@@ -122,8 +156,15 @@ export default  function Home() {
                     <div style={{width: "70%"}} className={"p-2"}>
                         {html?
                         <div style={{display:"flex",justifyContent:"flex-end",gap:"10px"}} >
+
                             {chosenId?
-                            <Text style={{}}>id:{chosenId}</Text>:<></>}
+                                <Text style={{}}>id:{chosenId}</Text>:<></>}
+
+
+                            {undoing?<Spinner size='xs' />:
+                            <AiOutlineRedo size={20} style={{cursor:"pointer"}} onClick={redo}/> }
+
+
 
                             <Tooltip label='bookmark current diff'>
                             {marked?
@@ -136,6 +177,7 @@ export default  function Home() {
                              <AiFillEyeInvisible size={20} style={{cursor:"pointer",color:"yellow"}} onClick={hideChanged}/>:
                                 <AiOutlineEyeInvisible size={20}  style={{cursor:"pointer",color:"gray"}} onClick={showChanged}/>
                             }
+
 
                         </div>
 
