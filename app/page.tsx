@@ -4,6 +4,7 @@ import {SideBar} from "@/components/sideBar";
 import {diff, formatters} from "jsondiffpatch"
 import 'jsondiffpatch/dist/formatters-styles/html.css'
 import 'jsondiffpatch/dist/formatters-styles/annotated.css'
+import {BsFileEarmarkArrowDownFill} from "react-icons/bs";
 
 import {AiFillEyeInvisible, AiOutlineEyeInvisible, AiOutlineRedo} from "react-icons/ai";
 import {useEffect, useState} from "react";
@@ -161,6 +162,8 @@ export default  function Home() {
                                 <Text style={{}}>id:{chosenId}</Text>:<></>}
 
 
+                            <BsFileEarmarkArrowDownFill size={20} style={{cursor:"pointer"}} onClick={()=>{window.open("/api/v3/json_diff/down/"+chosenId)}}/>
+
                             {undoing?<Spinner size='xs' />:
                             <AiOutlineRedo size={20} style={{cursor:"pointer"}} onClick={redo}/> }
 
@@ -169,13 +172,13 @@ export default  function Home() {
                             <Tooltip label='bookmark current diff'>
                             {marked?
                             <BsBookmarkCheckFill size={20} onClick={unmarkIt} style={{cursor:"pointer",color:"yellow"}} />:
-                            <BsBookmarkCheck size={20} onClick={markIt} style={{cursor:"pointer",color:"gray"}}/>
+                            <BsBookmarkCheck size={20} onClick={markIt} style={{cursor:"pointer"}}/>
                             }
                             </Tooltip>
 
                             {showUnchanged?
                              <AiFillEyeInvisible size={20} style={{cursor:"pointer",color:"yellow"}} onClick={hideChanged}/>:
-                                <AiOutlineEyeInvisible size={20}  style={{cursor:"pointer",color:"gray"}} onClick={showChanged}/>
+                                <AiOutlineEyeInvisible size={20}  style={{cursor:"pointer"}} onClick={showChanged}/>
                             }
 
 
