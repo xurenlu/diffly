@@ -169,12 +169,12 @@ export default  function Home() {
 
 
 
-                            <Tooltip label='bookmark current diff'>
+
                             {marked?
                             <BsBookmarkCheckFill size={20} onClick={unmarkIt} style={{cursor:"pointer",color:"yellow"}} />:
                             <BsBookmarkCheck size={20} onClick={markIt} style={{cursor:"pointer"}}/>
                             }
-                            </Tooltip>
+
 
                             {showUnchanged?
                              <AiFillEyeInvisible size={20} style={{cursor:"pointer",color:"yellow"}} onClick={hideChanged}/>:
