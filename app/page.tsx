@@ -93,7 +93,7 @@ export default  function Home() {
             const data = await resp.json();
             setUndoing(false)
             toastSucc("redo success","redo success. reloading...")
-            await handle(data.id)
+            await handle(chosenId)
         }catch (e){
             setUndoing(false)
             toastError("redo failed","redo failed. ")
