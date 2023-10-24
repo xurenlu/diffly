@@ -17,7 +17,7 @@ import {
     useDisclosure,
     useToast
 } from "@chakra-ui/react";
-import {notify} from '@/lib/notify'
+import notify from '@/lib/notify'
 import styles from './styles/itemStyle.module.css'
 import {useEffect, useRef, useState} from "react";
 import {VscDebugConsole} from 'react-icons/vsc'
