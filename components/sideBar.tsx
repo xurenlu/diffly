@@ -68,6 +68,28 @@ export  function SideBar(props:SideBarProps) {
             })
     }
 
+    configureAbly({ key: "r_fSNQ.NOV6Xg:N9Ao_SuWHzm2k5YY1uiJ2_KVPsOPUsVj53fuBzS249c"});
+    /**
+     * 每当ably的end_points频道有消息时，就会触发这个回调，更新items。
+     */
+    const [channel, ably] = useChannel('endpoints', (msg) => {
+        console.log("new msg,",msg)
+        if(groupId && msg.data== groupId){
+            fetch("/api/v3/json_diff/index?end_point_id=" + groupId).then((resp: any) => {
+                return resp.json()
+            })
+                .then((data: any) => {
+                    setItems(data);
+                    toast({
+                        title: "数据已经更新",
+                        description: "数据已经更新",
+                        status: "success",
+                        duration: 3000
+                    })
+                });
+        }
+    });
+
 
     useEffect(() => {
         handle()
