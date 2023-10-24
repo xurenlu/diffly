@@ -17,6 +17,7 @@ import {
     useDisclosure,
     useToast
 } from "@chakra-ui/react";
+import {notify} from '@/lib/notify'
 import styles from './styles/itemStyle.module.css'
 import {useEffect, useRef, useState} from "react";
 import {VscDebugConsole} from 'react-icons/vsc'
@@ -75,6 +76,11 @@ export  function SideBar(props:SideBarProps) {
     const [channel, ably] = useChannel('endpoints', (msg) => {
         console.log("new msg,",msg)
         if(groupId && msg.data== groupId){
+            try{
+                notify("数据已经更新","数据已经更新")
+            }catch (e){
+                console.log("notify error:",e)
+            }
             fetch("/api/v3/json_diff/index?end_point_id=" + groupId).then((resp: any) => {
                 return resp.json()
             })
