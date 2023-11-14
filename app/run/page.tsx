@@ -26,6 +26,7 @@ export default function RunPage(){
     const [cookie,setCookie] = useState("")
     const doHttp = ()=>{
         setLoading(true)
+        setResult({})
         fetch("/api/v3/manual/api",{
             method:"POST",
             mode:"cors",
