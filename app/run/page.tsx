@@ -69,7 +69,7 @@ export default function RunPage(){
                                 onChange={(event: any) => setHost(event.target.value)}>
                             <option value="https://crm.mbimc.com" selected>https://crm.mbimc.com/</option>
                             <option value={"http://jcrm.biying88.cn:8080"}>
-                                http://jcrm.biying88.cn:9090
+                                http://jcrm.biying88.cn:8080
                             </option>
                         </Select>
                     </InputLeftElement>
