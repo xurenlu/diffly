@@ -10,6 +10,7 @@ import {AiFillEyeInvisible, AiOutlineEyeInvisible, AiOutlineRedo} from "react-ic
 import {useEffect, useState} from "react";
 
 import {BsBookmarkCheck, BsBookmarkCheckFill} from "react-icons/bs"
+import HeaderNav from "@/components/headerNav";
 
 
 export default  function Home() {
@@ -146,8 +147,7 @@ export default  function Home() {
         return (
 
             <ChakraProvider>
-
-
+                <HeaderNav/>
 
                 <div style={{display: "flex", minWidth: "1080px"}}>
                     <div style={{width: "30%"}}>

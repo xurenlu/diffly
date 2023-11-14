@@ -224,8 +224,8 @@ export  function SideBar(props:SideBarProps) {
     return (
         <div style={{zIndex:"999",position:"fixed",top:"1px",left:"1px",minWidth:"300px"}}>
             <Xprogress jobName={jobName} />
-            <div style={{flex: "1",display:"flex",flexDirection:"row"}} className={"pl-2 pt-2"}>
-                <Image src={"/logo4.png"} alt={"log"} width={64} height={64} />
+            <div style={{flex: "1",display:"flex",flexDirection:"row",height:"64px"}} className={"pl-2 pt-2"}>
+
             </div>
         <div style={{minHeight:"500px",height:height,overflowY:"auto"}} className={"p-2"}>
 

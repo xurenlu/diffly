@@ -33,3 +33,14 @@ body {
     background: rgba(255,187,187,0.5) !important;
     text-decoration: line-through;
 }
+
+
+.active-page {
+    text-decoration: underline;
+}
+
+ul[role="navigation"] li {
+    display: inline-block;
+    margin-left: .5em;
+    margin-right: .5em;
+}
