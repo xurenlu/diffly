@@ -57,68 +57,70 @@ export default function RunPage(){
             });
         })
     }
-    return <>
-        <ChakraProvider>
-            <HeaderNav/>
-            <Text fontSize={"2xl"} className={"content-center center text-center"}>run page</Text>
+    return <ChakraProvider>
+        <HeaderNav/>
+        <Text fontSize={"2xl"} className={"content-center center text-center"}>HandMade</Text>
 
-            <form className={"m-4 p-8"}>
+        <form className={"m-4 p-8"}>
+            <FormControl>
+                <InputGroup>
+                    <InputLeftElement>
+                        <Select style={{width: "300px", paddingLeft: "30px"}}
+                                onChange={(event: any) => setHost(event.target.value)}>
+                            <option value="https://crm.mbimc.com" selected>https://crm.mbimc.com/</option>
+                            <option value={"http://jcrm.biying88.cn:9090"}>
+                                http://jcrm.biying88.cn:9090
+                            </option>
+                        </Select>
+                    </InputLeftElement>
+
+                    <Input placeholder="URL" style={{marginLeft: "300px"}}
+                           onChange={(e: any) => setUri(e.target.value)}/>
+
+                </InputGroup>
+            </FormControl>
+
+            <FormControl className={"mt-4"}>
+                <FormLabel>
+                    Cookie:
+                </FormLabel>
+                <Textarea placeholder={"cookie"} rows={3} cols={100}
+                          onChange={e => setCookie(e.target.value)}></Textarea>
+            </FormControl>
+
+            <FormControl className={"m-4"}>
+                <RadioGroup defaultValue='get' onChange={setMethod}>
+                    <Stack spacing={5} direction='row'>
+                        <Radio colorScheme='red' value='get'>
+                            GET
+                        </Radio>
+                        <Radio colorScheme='green' value='post'>
+                            POST
+                        </Radio>
+                    </Stack>
+                </RadioGroup>
+            </FormControl>
+
+            {method == "post" ?
                 <FormControl>
-                    <InputGroup>
-                        <InputLeftElement>
-                            <Select style={{width:"300px",paddingLeft:"30px"}}
-                            onChange={ (event:any)=> setHost(event.target.value)}>
-                                <option value="https://crm.mbimc.com/" selected>https://crm.mbimc.com/</option>
-                                <option value={"http://jcrm.biying88.cn:9090"}>
-                                    http://jcrm.biying88.cn:9090
-                                </option>
-                            </Select>
-                        </InputLeftElement>
+                    <Textarea rows={5} cols={100} placeholder={"body"}
+                              onChange={(event: any) => setBody(event.target.value)}/>
+                </FormControl> : <></>}
+            <FormControl className={"m-2"}>
+                <Button colorScheme={"teal"} className={"w-64"} variant={"outline"}
+                        leftIcon={<BsFillArrowUpCircleFill size={24}/>} onClick={doHttp}>submit</Button>
+            </FormControl>
+        </form>
 
-                        <Input placeholder="URL" style={{marginLeft:"300px"}} onChange={ (e:any)=> setUri(e.target.value) }/>
-
-                    </InputGroup>
-                </FormControl>
-
-                <FormControl className={"mt-4"}>
-                    <FormLabel>
-                        Cookie:
-                    </FormLabel>
-                    <Textarea placeholder={"cookie"} rows={3} cols={100} onChange={ e => setCookie(e.target.value) }></Textarea>
-                </FormControl>
-
-                <FormControl className={"m-4"}>
-                    <RadioGroup defaultValue='get' onChange={setMethod}>
-                        <Stack spacing={5} direction='row'>
-                            <Radio colorScheme='red' value='get'>
-                                GET
-                            </Radio>
-                            <Radio colorScheme='green' value='post'>
-                                POST
-                            </Radio>
-                        </Stack>
-                    </RadioGroup>
-                </FormControl>
-
-                {method=="post"?
-                <FormControl>
-                    <Textarea rows={5} cols={100} placeholder={"body"} onChange={ (event:any) => setBody(event.target.value)}/>
-                </FormControl>:<></>}
-                <FormControl className={"m-2"}>
-                    <Button colorScheme={"teal"} className={"w-64"} variant={"outline"} leftIcon={<BsFillArrowUpCircleFill size={24}/>} onClick={doHttp}>submit</Button>
-                </FormControl>
-            </form>
-
-            {loading?
+        {loading ?
             <div className="m-2 text-center center">
-                <Spinner size="xl" />
-            </div>:<></>}
-            {result && Object.keys(result).length > 0   ?
+                <Spinner size="xl"/>
+            </div> : <></>}
+        {result && Object.keys(result).length > 0 ?
             <div className="m-10">
                 <Text fontSize={"2xl"} className={"text-center m-2"}> result</Text>
                 <JsonViewer value={result} theme="dark" className={"p-8"}/>
-            </div>:<></>
-            }
-        </ChakraProvider>
-    </>
+            </div> : <></>
+        }
+    </ChakraProvider>
 }
