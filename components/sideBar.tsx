@@ -147,6 +147,7 @@ export  function SideBar(props:SideBarProps) {
                 status: "success",
                 duration: 3000,
             })
+            load4group({target:{value:groupId}})
         })
     }
     const all = ()=>{
