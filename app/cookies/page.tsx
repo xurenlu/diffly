@@ -77,7 +77,8 @@ export default function CookiePage(){
                         <InputGroup style={{textAlign:"right"}}>
                             <Input  placeholder={"可按名字或角色名检索"} onChange={ (e:any) => setRoleKw(e.target.value)} />
                             <InputRightElement width='4.5rem'>
-                                <Button colorScheme={"teal"} size='sm' onClick={handleClick} className={"mr-2"}>
+                                <Button colorScheme={"teal"} size='sm'
+                                        type="button" onClick={handleClick} className={"mr-2"}>
                                    Search
                                 </Button>
                             </InputRightElement>
