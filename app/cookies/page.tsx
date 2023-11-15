@@ -1,18 +1,18 @@
 'use client'
 import {
+    Button,
+    ChakraProvider,
+    Input,
+    InputGroup,
+    InputRightElement,
     Table,
-    Thead,
     Tbody,
-    Tr,
     Td,
     Text,
-    useToast,
-    ChakraProvider,
-    FormControl,
-    InputGroup,
-    Input, InputRightElement, Button
+    Thead,
+    Tr,
+    useToast
 } from "@chakra-ui/react";
-import { FaSearch } from "react-icons/fa";
 import HeaderNav from "@/components/headerNav";
 import {useEffect, useState} from "react";
 import CopyToClipboard from "@uiw/react-copy-to-clipboard";
