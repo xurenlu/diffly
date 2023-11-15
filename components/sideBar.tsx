@@ -27,9 +27,8 @@ import CopyToClipboard from '@uiw/react-copy-to-clipboard';
 import {PiArrowLeftBold, PiArrowRightBold} from "react-icons/pi";
 import {FaLink} from "react-icons/fa";
 import {BiBoltCircle, BiSolidCopy} from 'react-icons/bi'
-import {BsDatabaseFillAdd,BsPlusSlashMinus} from 'react-icons/bs'
+import {BsDatabaseFillAdd, BsPlusSlashMinus} from 'react-icons/bs'
 import {CgArrowsMergeAltV, CgArrowsShrinkV} from 'react-icons/cg'
-import Image from "next/image";
 import {FocusableElement} from "@chakra-ui/utils";
 import {Xprogress} from "@/components/xprogress";
 

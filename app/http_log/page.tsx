@@ -49,6 +49,9 @@ export default function LogsPage(){
                     <Thead>
                         <Tr>
                             <Td>
+                                id
+                            </Td>
+                            <Td>
                                 end_point_id
                             </Td>
                             <Td>
@@ -67,10 +70,22 @@ export default function LogsPage(){
                         {logs.map((item:any)=><>
                             <Tr>
                                 <Td>
+                                    {item.id}
+                                </Td>
+                                <Td>
                                     {item.end_point_id}
                                 </Td>
                                 <Td>
-                                    {item.http_request}
+                                    <CopyToClipboard  text={item.http_request}
+                                                      onClick={copied} background={"none"}
+                                                      style={{display:"inline-block"}}>
+                                        <BiSolidCopy className={styles.svgIcon} size={20}/>
+                                    </CopyToClipboard>
+                                    <span className={"w-64"} style={{width:"300px",display:"inline-block",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>
+{item.http_request}
+            </span>
+
+
                                 </Td>
                                 <Td>
                                     {item.md5}
