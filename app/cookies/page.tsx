@@ -5,7 +5,7 @@ import {
     Input,
     InputGroup,
     InputRightElement,
-    Table,
+    Table, TableContainer,
     Tbody,
     Td,
     Text,
@@ -88,7 +88,8 @@ export default function CookiePage(){
 
                 </form>
                 </div>
-                <Table colorScheme={"teal"} variant='striped' style={{width: "85%", margin: "0 auto"}}>
+                <TableContainer className={"border rounded-2xl w-4/5"} style={{margin:"0 auto"}}>
+                <Table  variant='simple' >
                     <Thead>
                         <Tr>
                             <Td>
@@ -145,6 +146,7 @@ export default function CookiePage(){
                         </>)}
                     </Tbody>
                 </Table>
+                </TableContainer>
 
                 <ReactPaginate
                     className={"m-4 ml-32"}

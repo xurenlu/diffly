@@ -1,6 +1,6 @@
 'use client'
 
-import {ChakraProvider, Table, Tbody, Td, Text, Thead, Tr, useToast} from "@chakra-ui/react";
+import {ChakraProvider, Table, TableContainer, Tbody, Td, Text, Thead, Tr, useToast} from "@chakra-ui/react";
 import HeaderNav from "@/components/headerNav";
 import CopyToClipboard from "@uiw/react-copy-to-clipboard";
 import {BiSolidCopy} from "react-icons/bi";
@@ -45,8 +45,9 @@ export default function LogsPage(){
             <div className={"p-4"}>
 
                 <Text fontSize={"2xl"} className={"m-4 text-center"} >logs</Text>
-                <Table colorScheme={"teal"}  variant='striped' style={{width:"85%",margin:"0 auto"}} >
-                    <Thead>
+                <TableContainer className={"border rounded-2xl w-4/5"} style={{margin:"0 auto"}} >
+                <Table   variant='simple' >
+                    <Thead bg={"gray-400"}>
                         <Tr>
                             <Td>
                                 id
@@ -105,6 +106,7 @@ export default function LogsPage(){
                         </>)}
                     </Tbody>
                 </Table>
+                </TableContainer>
 
                 <ReactPaginate
                     className={"m-4 ml-32"}
