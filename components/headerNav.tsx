@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function HeaderNav() {
   return <div className="navbar bg-base-100">
       <div className="flex-1">
-          <a className="btn btn-ghost  text-xl" style={{display: "inline-block", "textTransform": "none"}}>
+          <a className="btn btn-ghost  text-2xl font-effect-hero font-gradient " style={{display: "inline-block", "textTransform": "none",top:"8px"}} >
               <Image src="/logo.png" width={40} height={40} className={"mr-2"} alt="logo of diffly"
                      style={{"display": "inline-block"}}/>
               Api diff
